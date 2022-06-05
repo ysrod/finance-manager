@@ -17,6 +17,8 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
+
+// classe para registrar as finanças
 class FinanceActivity : AppCompatActivity() {
 
 
@@ -74,10 +76,10 @@ class FinanceActivity : AppCompatActivity() {
                         financesRef.child(financeId).setValue(finance)
 
                         if (type) {
-                            financeType = "Despesa"
+                            financeType = "Receita"
 
                         } else {
-                            financeType = "Receita"
+                            financeType = "Despesa"
                         }
 
                         val dialog = AlertDialog.Builder(this@FinanceActivity)
@@ -98,19 +100,19 @@ class FinanceActivity : AppCompatActivity() {
                         snapshot: DataSnapshot,
                         previousChildName: String?
                     ) {
-                        TODO("Not yet implemented")
+
                     }
 
                     override fun onChildRemoved(snapshot: DataSnapshot) {
-                        TODO("Not yet implemented")
+
                     }
 
                     override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                        TODO("Not yet implemented")
+
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
+
                     }
 
                 })
@@ -137,7 +139,7 @@ class FinanceActivity : AppCompatActivity() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+
                 }
 
             })
