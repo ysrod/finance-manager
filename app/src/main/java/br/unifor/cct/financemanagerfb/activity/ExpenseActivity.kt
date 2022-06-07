@@ -13,6 +13,8 @@ class ExpenseActivity : AppCompatActivity() {
     private lateinit var mExpenseList : RecyclerView
     private lateinit var mExpenseAdd: FloatingActionButton
     private lateinit var mFinanceAdapater : FinanceActivity
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_expense)

@@ -25,7 +25,7 @@ class FinanceActivity : AppCompatActivity() {
     private lateinit var mFinanceDescription : EditText
     private lateinit var mFinanceAmount : EditText
     private lateinit var mFinanceDate : EditText
-    private lateinit var mFinanceSwitch : SwitchCompat
+    private lateinit var mFinanceSwitch : Switch
     private lateinit var mFinanceButton : Button
 
     private lateinit var mAuth : FirebaseAuth
@@ -39,11 +39,11 @@ class FinanceActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_revenue)
+        setContentView(R.layout.activity_finance)
 
         mUserKey = intent.getStringExtra("userKey")?:""
         mFinanceKey = intent.getStringExtra("financeKey")?:""
-        mFinanceType = intent.getBooleanExtra("financeType",false)
+        mFinanceType = intent.getBooleanExtra("financeType", false)
 
         mAuth = Firebase.auth
         mDatabase = Firebase.database
@@ -53,6 +53,8 @@ class FinanceActivity : AppCompatActivity() {
         mFinanceDate = findViewById(R.id.finance_edittext_date)
         mFinanceSwitch = findViewById(R.id.finance_switch)
         mFinanceButton = findViewById(R.id.finance_button)
+
+        mFinanceSwitch.isActivated = mFinanceType
 
         mFinanceButton.setOnClickListener{
             val description = mFinanceDescription.text.toString().trim()
@@ -84,7 +86,7 @@ class FinanceActivity : AppCompatActivity() {
 
                         val dialog = AlertDialog.Builder(this@FinanceActivity)
                             .setTitle("Finances Manager")
-                            .setMessage("${financeType} cadastrada com sucesso!")
+                            .setMessage("$financeType cadastrada com sucesso!")
                             .setCancelable(false)
                             .setPositiveButton("Ok"){dialog, _ ->
                                 dialog.dismiss()
