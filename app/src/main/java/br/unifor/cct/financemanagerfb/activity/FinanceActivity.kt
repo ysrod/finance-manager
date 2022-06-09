@@ -127,6 +127,7 @@ class FinanceActivity : AppCompatActivity() {
         if (mFinanceKey.isBlank()) {
             mFinanceSwitch.isActivated = mFinanceType
             mFinanceButton.text = "Cadastrar"
+            //cadastrar
         } else {
             mFinanceButton.text = "Atualizar"
             val userRef = mDatabase.getReference("/users")
