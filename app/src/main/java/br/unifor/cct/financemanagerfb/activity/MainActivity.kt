@@ -38,8 +38,8 @@ class MainActivity : AppCompatActivity() {
         mMainExpenseList = findViewById(R.id.main_recyclerview_expense)
         mMainRevenueButton = findViewById(R.id.main_button_revenue)
         mMainExpenseButton = findViewById(R.id.main_button_expense)
-        mMainPlaceholderExpense = findViewById(R.id.textView2)
-        mMainPlaceholderRevenue = findViewById(R.id.textView)
+        mMainPlaceholderExpense = findViewById(R.id.textView)
+        mMainPlaceholderRevenue = findViewById(R.id.textView2)
 
         mMainRevenueButton.setOnClickListener{
             Log.i("App","cliquei")

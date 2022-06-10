@@ -63,7 +63,8 @@ class ExpenseActivity : AppCompatActivity(), FinancesItemListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val user = snapshot.children.first().getValue(User::class.java)
                     mUserKey = user?.id ?:""
-                    mExpenseAdapater = FinancesAdapter(user?.finances?.values?.toList()!!)
+                    mExpenseAdapater = FinancesAdapter(user?.finances?.values?.toList()?.filter {
+                        !it.type}!!)
                     mExpenseAdapater.setOnFinanceItemListener(this@ExpenseActivity)
                     mExpenseList.adapter = mExpenseAdapater
                 }
@@ -88,7 +89,7 @@ class ExpenseActivity : AppCompatActivity(), FinancesItemListener {
 
         val dialog = AlertDialog.Builder(this)
             .setTitle("Finance Manager")
-            .setMessage("Você tem certeza que quer excluir '${expense.description}'?")
+            .setMessage("Você tem certeza que quer excluir a despesa '${expense.description}'?")
             .setCancelable(false)
             .setPositiveButton("SIM") {dialog, _ ->
 

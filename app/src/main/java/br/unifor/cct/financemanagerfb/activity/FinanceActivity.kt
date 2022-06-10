@@ -54,13 +54,21 @@ class FinanceActivity : AppCompatActivity() {
         mFinanceSwitch = findViewById(R.id.finance_switch)
         mFinanceButton = findViewById(R.id.finance_button)
 
-        mFinanceSwitch.isActivated = mFinanceType
+        mFinanceSwitch.isChecked = mFinanceType //muda o estado do switch
+
+        mFinanceSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked){
+                mFinanceType = isChecked
+            } else {
+                mFinanceType = !isChecked
+            }
+        }
 
         mFinanceButton.setOnClickListener{
             val description = mFinanceDescription.text.toString().trim()
             val amount = mFinanceAmount.text.toString().trim()
             val date = mFinanceDate.text.toString().trim()
-            val type = mFinanceSwitch.isActivated
+            val type = mFinanceType
 
             if(description.isBlank()) {
                 mFinanceDescription.error = "Este campo é obrigatório"
@@ -74,22 +82,15 @@ class FinanceActivity : AppCompatActivity() {
                         val financesRef = usersRef.child(snapshot.key!!).child("/finances/")
                         val financeId = financesRef.push().key ?: " "
                         val finance = Finances(financeId, description, amount, date, type)
-                        var financeType = " "
                         financesRef.child(financeId).setValue(finance)
-
-                        if (type) {
-                            financeType = "Receita"
-
-                        } else {
-                            financeType = "Despesa"
-                        }
 
                         val dialog = AlertDialog.Builder(this@FinanceActivity)
                             .setTitle("Finances Manager")
-                            .setMessage("$financeType cadastrada com sucesso!")
+                            .setMessage(if (type) "Receita cadastrada com sucesso!" else "Despesa cadastrada com sucesso!")
                             .setCancelable(false)
                             .setPositiveButton("Ok"){dialog, _ ->
                                 dialog.dismiss()
+
                                 finish()
                             }
                             .create()
@@ -139,7 +140,7 @@ class FinanceActivity : AppCompatActivity() {
                     mFinanceDescription.text = Editable.Factory.getInstance().newEditable(finance?.description)
                     mFinanceAmount.text = Editable.Factory.getInstance().newEditable(finance?.amount)
                     mFinanceDate.text = Editable.Factory.getInstance().newEditable(finance?.date)
-                    mFinanceSwitch.isActivated = finance?.type ?:true
+                    mFinanceSwitch.isChecked = finance?.type ?:true
                 }
 
                 override fun onCancelled(error: DatabaseError) {

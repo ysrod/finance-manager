@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,6 +37,9 @@ class RevenueActivity : AppCompatActivity(), FinancesItemListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_revenue)
 
+        Toast.makeText(baseContext, "Revenue Activity",
+            Toast.LENGTH_SHORT).show()
+
         mAuth = Firebase.auth
         mDatabase = Firebase.database
 
@@ -60,7 +64,8 @@ class RevenueActivity : AppCompatActivity(), FinancesItemListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val user = snapshot.children.first().getValue(User::class.java)
                     mUserKey = user?.id ?:""
-                    mRevenueAdapter = FinancesAdapter(user?.finances?.values?.toList()!!)
+                    mRevenueAdapter = FinancesAdapter(user?.finances?.values?.toList()?.filter {
+                        it.type}!!)
                     mRevenueAdapter.setOnFinanceItemListener(this@RevenueActivity)
                     mRevenueList.adapter = mRevenueAdapter
                 }
@@ -103,7 +108,7 @@ class RevenueActivity : AppCompatActivity(), FinancesItemListener {
 
         val dialog = AlertDialog.Builder(this)
             .setTitle("Finance Manager")
-            .setMessage("Você tem certeza que quer excluir '${revenue.description}?'")
+            .setMessage("Você tem certeza que quer excluir a receita '${revenue.description}?'")
             .setCancelable(false)
             .setPositiveButton("SIM") {dialog, _ ->
 
