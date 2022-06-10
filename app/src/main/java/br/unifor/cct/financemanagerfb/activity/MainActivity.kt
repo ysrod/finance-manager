@@ -8,9 +8,14 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import br.unifor.cct.financemanagerfb.R
+import br.unifor.cct.financemanagerfb.adapter.FinancesAdapter
+import br.unifor.cct.financemanagerfb.entity.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import org.w3c.dom.Text
@@ -26,6 +31,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mDatabase : FirebaseDatabase
     private lateinit var mAuth : FirebaseAuth
+
+    private var mUserKey = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +75,22 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        val userRef = mDatabase.getReference("/users")
+        userRef.orderByChild("email").equalTo(mAuth.currentUser?.email)
+            .addValueEventListener(object: ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val user = snapshot.children.first().getValue(User::class.java)
+                    mUserKey = user?.id ?:""
+//                     = FinancesAdapter(user?.finances?.values?.toList()?.filter {
+//                        it.type}!!)
+//                    mRevenueAdapter.setOnFinanceItemListener(this@RevenueActivity)
+//                    mRevenueList.adapter = mRevenueAdapter
+                }
 
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
     }
 }

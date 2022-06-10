@@ -3,14 +3,12 @@ package br.unifor.cct.financemanagerfb.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Switch
-import android.widget.ToggleButton
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SwitchCompat
 import br.unifor.cct.financemanagerfb.R
 import br.unifor.cct.financemanagerfb.entity.Finances
+import br.unifor.cct.financemanagerfb.entity.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -60,7 +58,7 @@ class FinanceActivity : AppCompatActivity() {
             if (isChecked){
                 mFinanceType = isChecked
             } else {
-                mFinanceType = !isChecked
+                mFinanceType = isChecked
             }
         }
 
@@ -126,28 +124,32 @@ class FinanceActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (mFinanceKey.isBlank()) {
-            mFinanceSwitch.isActivated = mFinanceType
+            mFinanceSwitch.isChecked = mFinanceType
             mFinanceButton.text = "Cadastrar"
             //cadastrar
             //oi iaismin
         } else {
             mFinanceButton.text = "Atualizar"
             val userRef = mDatabase.getReference("/users")
-            val financeRef = userRef.child(mUserKey).child("/finances")
-            financeRef.equalTo(mFinanceKey).addValueEventListener(object:ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val finance = snapshot.getValue(Finances::class.java)
-                    mFinanceDescription.text = Editable.Factory.getInstance().newEditable(finance?.description)
-                    mFinanceAmount.text = Editable.Factory.getInstance().newEditable(finance?.amount)
-                    mFinanceDate.text = Editable.Factory.getInstance().newEditable(finance?.date)
-                    mFinanceSwitch.isChecked = finance?.type ?:true
-                }
+            userRef
+                .orderByChild("email")
+                .equalTo(mAuth.currentUser?.email)
+                .addValueEventListener(object:ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val user = snapshot.children.first().getValue(User::class.java)
+                        val finance = user?.finances?.values?.find{it.id == mFinanceKey}
+                        mFinanceDescription.text = Editable.Factory.getInstance().newEditable(finance?.description)
+                        mFinanceAmount.text = Editable.Factory.getInstance().newEditable(finance?.amount)
+                        mFinanceDate.text = Editable.Factory.getInstance().newEditable(finance?.date)
+                        mFinanceSwitch.isChecked = finance?.type ?:false
+                    }
 
-                override fun onCancelled(error: DatabaseError) {
+                    override fun onCancelled(error: DatabaseError) {
 
-                }
+                    }
 
-            })
+                })
+
         }
     }
 }
