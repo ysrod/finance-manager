@@ -11,6 +11,7 @@ import br.unifor.cct.financemanagerfb.R
 import br.unifor.cct.financemanagerfb.adapter.FinancesAdapter
 import br.unifor.cct.financemanagerfb.adapter.FinancesItemListener
 import br.unifor.cct.financemanagerfb.entity.Finances
+import br.unifor.cct.financemanagerfb.entity.User
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -55,48 +56,13 @@ class RevenueActivity : AppCompatActivity(), FinancesItemListener {
         super.onStart()
         val userRef = mDatabase.getReference("/users")
         userRef.orderByChild("email").equalTo(mAuth.currentUser?.email)
-            .addChildEventListener(object:ChildEventListener{
-
-                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-
-                    val financesRef = userRef.child(snapshot.key!!).child("/finances")
-
-                    financesRef.addValueEventListener(object:ValueEventListener{
-
-                        override fun onDataChange(snapshot: DataSnapshot) {
-
-                            val finances : MutableList<Finances> = mutableListOf()
-
-                            snapshot.children.forEach {
-                                val finance = it.getValue(Finances::class.java)!!
-                                if (finance.type){ //se for receita
-                                    finances.add(finance)
-                                }
-
-                            }
-
-                            mRevenueAdapter = FinancesAdapter(finances)
-                            mRevenueAdapter.setOnFinanceItemListener(this@RevenueActivity)
-                            mRevenueList.adapter = mRevenueAdapter
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-
-                        }
-
-                    })
-                }
-
-                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-
-                }
-
-                override fun onChildRemoved(snapshot: DataSnapshot) {
-
-                }
-
-                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-
+            .addValueEventListener(object:ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val user = snapshot.children.first().getValue(User::class.java)
+                    mUserKey = user?.id ?:""
+                    mRevenueAdapter = FinancesAdapter(user?.finances?.values?.toList()!!)
+                    mRevenueAdapter.setOnFinanceItemListener(this@RevenueActivity)
+                    mRevenueList.adapter = mRevenueAdapter
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -107,24 +73,29 @@ class RevenueActivity : AppCompatActivity(), FinancesItemListener {
     }
 
     override fun setOnItemClickListener(view: View, position: Int) {
-        val userRef = mDatabase.getReference("/users")
-        userRef.orderByChild("email").equalTo(mAuth.currentUser?.email)
-            .addValueEventListener(object:ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val userKey = snapshot.key ?: ""
-                    val revenueKey = mRevenueAdapter.finances[position].id
-
-                    val it = Intent(this@RevenueActivity,FinanceActivity::class.java)
-                    it.putExtra("userKey", userKey)
-                    it.putExtra("revenueKey",revenueKey)
-                    startActivity(it)
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-
-                }
-
-            })
+        val it = Intent(this, FinanceActivity::class.java)
+        it.putExtra("userKey", mUserKey)
+        it.putExtra("financeKey", mRevenueAdapter.finances[position].id)
+        it.putExtra("financeType", true)
+        startActivity(it)
+//        val userRef = mDatabase.getReference("/users")
+//        userRef.orderByChild("email").equalTo(mAuth.currentUser?.email)
+//            .addValueEventListener(object:ValueEventListener{
+//                override fun onDataChange(snapshot: DataSnapshot) {
+//                    val userKey = snapshot.key ?: ""
+//                    val revenueKey = mRevenueAdapter.finances[position].id
+//
+//                    val it = Intent(this@RevenueActivity,FinanceActivity::class.java)
+//                    it.putExtra("userKey", userKey)
+//                    it.putExtra("revenueKey",revenueKey)
+//                    startActivity(it)
+//                }
+//
+//                override fun onCancelled(error: DatabaseError) {
+//
+//                }
+//
+//            })
     }
 
     override fun setOnItemLongClickListener(view: View, position: Int) {
@@ -144,10 +115,12 @@ class RevenueActivity : AppCompatActivity(), FinancesItemListener {
                     .child(revenue.id)
 
                 revenueRef.removeValue()
+                dialog.dismiss()
             }
             .setNegativeButton("NÃO") {dialog, _ ->
                 dialog.dismiss()
             }
+            .create()
 
         dialog.show()
     }
