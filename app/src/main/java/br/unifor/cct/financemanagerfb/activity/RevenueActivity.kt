@@ -107,7 +107,7 @@ class RevenueActivity : AppCompatActivity(), FinancesItemListener {
             .setCancelable(false)
             .setPositiveButton("SIM") {dialog, _ ->
 
-                val revenue = mRevenueAdapter.finances[position]
+//                val revenue = mRevenueAdapter.finances[position]
                 val revenueRef = mDatabase.reference
                     .child("/users")
                     .child(mUserKey)
