@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import br.unifor.cct.financemanagerfb.R
-import br.unifor.cct.financemanagerfb.entity.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -29,8 +28,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mDatabase : FirebaseDatabase
     private lateinit var mAuth : FirebaseAuth
 
-    private var mUserKey = ""
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -48,7 +45,6 @@ class MainActivity : AppCompatActivity() {
         mTotal = findViewById(R.id.main_textView_total)
 
         mMainRevenueButton.setOnClickListener{
-            Log.i("App","cliquei")
             val it = Intent(this,FinanceActivity::class.java)
             it.putExtra("financeType",true)
             startActivity(it)

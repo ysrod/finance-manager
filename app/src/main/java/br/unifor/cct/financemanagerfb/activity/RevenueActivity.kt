@@ -80,24 +80,6 @@ class RevenueActivity : AppCompatActivity(), FinancesItemListener {
         it.putExtra("financeKey", mRevenueAdapter.finances[position].id)
         it.putExtra("financeType", true)
         startActivity(it)
-//        val userRef = mDatabase.getReference("/users")
-//        userRef.orderByChild("email").equalTo(mAuth.currentUser?.email)
-//            .addValueEventListener(object:ValueEventListener{
-//                override fun onDataChange(snapshot: DataSnapshot) {
-//                    val userKey = snapshot.key ?: ""
-//                    val revenueKey = mRevenueAdapter.finances[position].id
-//
-//                    val it = Intent(this@RevenueActivity,FinanceActivity::class.java)
-//                    it.putExtra("userKey", userKey)
-//                    it.putExtra("revenueKey",revenueKey)
-//                    startActivity(it)
-//                }
-//
-//                override fun onCancelled(error: DatabaseError) {
-//
-//                }
-//
-//            })
     }
 
     override fun setOnItemLongClickListener(view: View, position: Int) {
@@ -109,7 +91,6 @@ class RevenueActivity : AppCompatActivity(), FinancesItemListener {
             .setCancelable(false)
             .setPositiveButton("SIM") {dialog, _ ->
 
-//                val revenue = mRevenueAdapter.finances[position]
                 val revenueRef = mDatabase.reference
                     .child("/users")
                     .child(mUserKey)
