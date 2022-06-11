@@ -93,7 +93,7 @@ class FinanceActivity : AppCompatActivity() {
             var isFormFilled = true
             isFormFilled = isFieldFilled(description, mFinanceDescription) && isFormFilled
             isFormFilled = isFieldFilled(amountText, mFinanceAmount) && isFormFilled
-//            isFormFilled = isFieldFilled(date, mFinanceDate) && isFormFilled
+            isFormFilled = isFieldFilled(date, mFinanceDate) && isFormFilled
 
             if (isFormFilled) {
 
@@ -214,6 +214,14 @@ class FinanceActivity : AppCompatActivity() {
     }
 
     private fun isFieldFilled(input: CharSequence, field: EditText) : Boolean {
+        if (input.isBlank()) {
+            field.error = "Este campo é obrigatório"
+            return false
+        }
+        return true
+    }
+
+    private fun isFieldFilled(input : CharSequence, field : TextView) : Boolean {
         if (input.isBlank()) {
             field.error = "Este campo é obrigatório"
             return false

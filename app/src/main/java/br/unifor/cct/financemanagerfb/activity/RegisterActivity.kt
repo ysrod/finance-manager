@@ -14,6 +14,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import android.telephony.PhoneNumberUtils
+import android.telephony.PhoneNumberUtils.formatNumber
 
 class RegisterActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -66,6 +68,8 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         isFormFilled = isFieldFilled(passwordConfirmation, mRegisterPasswordConfirmation) && isFormFilled
         isFormFilled = areFieldEqual(password, passwordConfirmation, mRegisterPasswordConfirmation) && isFormFilled
 
+        val formattedPhone = formatNumber(phone.toString(),"BR")
+
 
         if (isFormFilled) {
             val usersRef = mDatabase.getReference("/users") // Pega a referencia
@@ -78,7 +82,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                             id = mAuth.currentUser!!.uid,
                             name = name.toString(),
                             email = email.toString(),
-                            phone = phone.toString()
+                            phone = formattedPhone
                         )
 
                         usersRef.child(user.id).setValue(user) // Cria um nó filho identificado pela chave, e dentro coloca o usuário
