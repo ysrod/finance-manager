@@ -6,6 +6,7 @@ data class User(
     val email : String ="",
     val name : String = "",
     val phone : String = "",
-    val finances : HashMap<String, Finances> = hashMapOf()
+    val finances : HashMap<String, Finances> = hashMapOf(),
+    val balance : Double = 0.0
 
 )

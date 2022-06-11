@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Message
 import android.text.Editable
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SwitchCompat
@@ -62,7 +63,7 @@ class FinanceActivity : AppCompatActivity() {
 
         mFinanceButton.setOnClickListener{
             val description = mFinanceDescription.text.toString().trim()
-            val amount = mFinanceAmount.text.toString().trim()
+            val amount = mFinanceAmount.text.toString().trim().toDouble()
             val date = mFinanceDate.text.toString().trim()
             val type = mFinanceType
 
@@ -80,6 +81,13 @@ class FinanceActivity : AppCompatActivity() {
                             val financeId = financesRef.push().key ?: " "
                             val finance = Finances(financeId, description, amount, date, type)
                             financesRef.child(financeId).setValue(finance)
+                            if (type) {
+                                updateBalance(amount)
+                            } else {
+                                updateBalance(-amount)
+                            }
+
+
 
                             dialogShow(if (type) "Receita cadastrada com sucesso!" else "Despesa cadastrada com sucesso!")
 
@@ -115,6 +123,7 @@ class FinanceActivity : AppCompatActivity() {
                     .child(mFinanceKey)
 
                 financeRef.setValue(finance)
+                updateBalance(amount)
 
                 dialogShow(if (type) "Receita '${description}' atualizada com sucesso!" else
                     "Despesa '${description}' atualizada com sucesso!")
@@ -144,7 +153,7 @@ class FinanceActivity : AppCompatActivity() {
                         val user = snapshot.children.first().getValue(User::class.java)
                         val finance = user?.finances?.values?.find{it.id == mFinanceKey}
                         mFinanceDescription.text = Editable.Factory.getInstance().newEditable(finance?.description)
-                        mFinanceAmount.text = Editable.Factory.getInstance().newEditable(finance?.amount)
+                        mFinanceAmount.text = Editable.Factory.getInstance().newEditable(finance?.amount.toString())
                         mFinanceDate.text = Editable.Factory.getInstance().newEditable(finance?.date)
                         mFinanceSwitch.isChecked = finance?.type ?:false
                     }
@@ -171,5 +180,35 @@ class FinanceActivity : AppCompatActivity() {
             .create()
 
         dialog.show()
+    }
+
+    fun updateBalance(amount : Double) {
+        val userRef = mDatabase.getReference("/users")
+        userRef
+            .orderByChild("email")
+            .equalTo(mAuth.currentUser?.email)
+            .addValueEventListener(object:ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    var balance = snapshot.children.first().getValue(User::class.java)?.balance
+                    if (balance != null) {
+                        balance += amount
+                        Log.i("App", "balance: $balance")
+                    }
+
+                    val balanceRef = mDatabase
+                        .reference
+                        .child("/users")
+                        .child(mUserKey)
+                        .child("/balance")
+                    
+                    balanceRef.setValue(balance)
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
     }
 }
