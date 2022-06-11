@@ -111,7 +111,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun isFieldFilled(input: CharSequence, field: EditText) : Boolean {
         if (input.isBlank()) {
-            field.error = "Esse campo é obrigatório"
+            field.error = "Este campo é obrigatório"
             return false
         }
         return true

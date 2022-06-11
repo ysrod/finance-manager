@@ -58,6 +58,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                         if (task.isSuccessful){
                             val it = Intent(this,MainActivity::class.java)
                             startActivity(it)
+                            finish()
                         } else {
                             showDialog("Usuário ou senha inválidos")
                         }

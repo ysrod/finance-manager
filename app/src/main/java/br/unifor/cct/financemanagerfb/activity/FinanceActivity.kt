@@ -1,5 +1,6 @@
 package br.unifor.cct.financemanagerfb.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Message
@@ -63,74 +64,78 @@ class FinanceActivity : AppCompatActivity() {
 
         mFinanceButton.setOnClickListener{
             val description = mFinanceDescription.text.toString().trim()
-            val amount = mFinanceAmount.text.toString().trim().toDouble()
+            val amountText = mFinanceAmount.text.toString().trim()
             val date = mFinanceDate.text.toString().trim()
             val type = mFinanceType
 
-            if(description.isBlank()) {
-                mFinanceDescription.error = "Este campo é obrigatório"
-                return@setOnClickListener
-            }
+            var isFormFilled = true
+            isFormFilled = isFieldFilled(description, mFinanceDescription) && isFormFilled
+            isFormFilled = isFieldFilled(amountText, mFinanceAmount) && isFormFilled
+            isFormFilled = isFieldFilled(date, mFinanceDate) && isFormFilled
 
-            if(mFinanceKey.isBlank()){
-                val usersRef = mDatabase.getReference("/users/")
-                usersRef.orderByChild("email").equalTo(mAuth.currentUser?.email)
-                    .addChildEventListener(object: ChildEventListener {
-                        override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                            val financesRef = usersRef.child(snapshot.key!!).child("/finances/")
-                            val financeId = financesRef.push().key ?: " "
-                            val finance = Finances(financeId, description, amount, date, type)
-                            financesRef.child(financeId).setValue(finance)
-                            if (type) {
-                                updateBalance(amount)
-                            } else {
-                                updateBalance(-amount)
+            if (isFormFilled) {
+
+                val amount = amountText.toDouble()
+
+                if(mFinanceKey.isBlank()){
+                    val usersRef = mDatabase.getReference("/users/")
+                    usersRef.orderByChild("email").equalTo(mAuth.currentUser?.email)
+                        .addChildEventListener(object: ChildEventListener {
+                            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                                val financesRef = usersRef.child(snapshot.key!!).child("/finances/")
+                                val financeId = financesRef.push().key ?: " "
+                                val finance = Finances(financeId, description, amount, date, type)
+                                financesRef.child(financeId).setValue(finance)
+                                if (type) {
+                                    updateBalance(amount)
+                                } else {
+                                    updateBalance(-amount)
+                                }
+
+
+
+                                dialogShow(if (type) "Receita cadastrada com sucesso!" else "Despesa cadastrada com sucesso!")
+
                             }
 
+                            override fun onChildChanged(
+                                snapshot: DataSnapshot,
+                                previousChildName: String?
+                            ) {
 
+                            }
 
-                            dialogShow(if (type) "Receita cadastrada com sucesso!" else "Despesa cadastrada com sucesso!")
+                            override fun onChildRemoved(snapshot: DataSnapshot) {
 
-                        }
+                            }
 
-                        override fun onChildChanged(
-                            snapshot: DataSnapshot,
-                            previousChildName: String?
-                        ) {
+                            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
 
-                        }
+                            }
 
-                        override fun onChildRemoved(snapshot: DataSnapshot) {
+                            override fun onCancelled(error: DatabaseError) {
 
-                        }
+                            }
 
-                        override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                        })
 
-                        }
+                } else {
+                    val finance = Finances(mFinanceKey,description,amount,date,type)
+                    val financeRef = mDatabase
+                        .reference
+                        .child("/users")
+                        .child(mUserKey)
+                        .child("/finances")
+                        .child(mFinanceKey)
 
-                        override fun onCancelled(error: DatabaseError) {
+                    financeRef.setValue(finance)
+                    updateBalance(amount)
 
-                        }
+                    dialogShow(if (type) "Receita '${description}' atualizada com sucesso!" else
+                        "Despesa '${description}' atualizada com sucesso!")
 
-                    })
-            } else {
-                val finance = Finances(mFinanceKey,description,amount,date,type)
-                val financeRef = mDatabase
-                    .reference
-                    .child("/users")
-                    .child(mUserKey)
-                    .child("/finances")
-                    .child(mFinanceKey)
-
-                financeRef.setValue(finance)
-                updateBalance(amount)
-
-                dialogShow(if (type) "Receita '${description}' atualizada com sucesso!" else
-                    "Despesa '${description}' atualizada com sucesso!")
-
+                }
             }
-
-
 
         }
     }
@@ -167,14 +172,18 @@ class FinanceActivity : AppCompatActivity() {
         }
     }
 
-    fun dialogShow(message: CharSequence){
+    private fun dialogShow(message: String){
         val dialog = AlertDialog.Builder(this@FinanceActivity)
-            .setTitle("Finances Manager")
+            .setTitle("Piggy Bank")
             .setMessage(message)
             .setCancelable(false)
             .setPositiveButton("Ok"){dialog, _ ->
                 dialog.dismiss()
-
+                if (mFinanceType) {
+                    startActivity(Intent(this,RevenueActivity::class.java))
+                } else {
+                    startActivity(Intent(this,ExpenseActivity::class.java))
+                }
                 finish()
             }
             .create()
@@ -182,7 +191,15 @@ class FinanceActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    fun updateBalance(amount : Double) {
+    private fun isFieldFilled(input: CharSequence, field: EditText) : Boolean {
+        if (input.isBlank()) {
+            field.error = "Este campo é obrigatório"
+            return false
+        }
+        return true
+    }
+
+   private fun updateBalance(amount : Double) {
         val userRef = mDatabase.getReference("/users")
         userRef
             .orderByChild("email")

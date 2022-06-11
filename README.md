@@ -11,12 +11,12 @@ Design telas;
 
 Register Activity:
 - Não permitir que o usuário se cadastre com um e-mail já existente no firebase
-- Não permitir senhas com menos de 6 caracteres
+OK - Não permitir senhas com menos de 6 caracteres
 
 
 Main Activity:
-- Mostrar saldo do usuário a partir de cálculo Receitas - Despesas feito no atributo 'saldo';
-- Fechar aplicativo caso aperte 'voltar' nesta tela;
+- Mostrar saldo do usuário a partir de cálculo Receitas - Despesas feito no atributo 'balance';
+OK - Fechar aplicativo caso aperte 'voltar' nesta tela;
 OK - Botões enviarem para a Finance Activity o estado do switch que indica se é uma despesa ou receita.
 - Recyclerview mostrar 5 itens nos quais "type = false" (despesa);
 - Recyclerview mostrar 5 itens nos quais "type = true" (receita);
