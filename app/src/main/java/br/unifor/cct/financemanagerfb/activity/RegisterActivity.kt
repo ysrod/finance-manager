@@ -62,60 +62,72 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         isFormFilled = isFieldFilled(email, mRegisterEmail) && isFormFilled
         isFormFilled = isFieldFilled(phone, mRegisterPhone) && isFormFilled
         isFormFilled = isFieldFilled(password, mRegisterPassword) && isFormFilled
+        isFormFilled = fieldHasEnoughSize(password, mRegisterPassword) && isFormFilled
         isFormFilled = isFieldFilled(passwordConfirmation, mRegisterPasswordConfirmation) && isFormFilled
+        isFormFilled = areFieldEqual(password, passwordConfirmation, mRegisterPasswordConfirmation) && isFormFilled
 
         if (isFormFilled) {
+            val usersRef = mDatabase.getReference("/users")
+            val key = usersRef.push().key?:""
 
-            if (password == passwordConfirmation) {
-                val usersRef = mDatabase.getReference("/users")
-                val key = usersRef.push().key?:""
+            val user = User (
+                id = key,
+                name = name.toString(),
+                email = email.toString(),
+                phone = phone.toString()
+            )
 
-                val user = User (
-                    id = key,
-                    name = name.toString(),
-                    email = email.toString(),
-                    phone = phone.toString()
-                    )
+            usersRef.child(key).setValue(user)
 
-                usersRef.child(key).setValue(user)
+            mAuth.createUserWithEmailAndPassword(email.toString(), password.toString())
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val dialog = AlertDialog.Builder(this)
+                            .setTitle("Finance Manager")
+                            .setMessage("Usuário cadastrado!")
+                            .setCancelable(false)
+                            .setPositiveButton("Ok") {dialog, _ ->
+                                dialog.dismiss()
+                                finish()
+                            }
+                            .create()
 
-                mAuth.createUserWithEmailAndPassword(email.toString(), password.toString())
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val dialog = AlertDialog.Builder(this)
-                                .setTitle("Finance Manager")
-                                .setMessage("Usuário cadastrado!")
-                                .setCancelable(false)
-                                .setPositiveButton("Ok") {dialog, _ ->
-                                    dialog.dismiss()
-                                    finish()
-                                }
-                                .create()
-
-                            dialog.show()
-                        } else {
-                            val dialog = AlertDialog.Builder(this)
-                                .setTitle("Finance Manager")
-                                .setMessage("Ocorreu um erro. Tente novamente.")
-                                .setCancelable(false)
-                                .setPositiveButton("Ok") {dialog, _ ->
-                                    dialog.dismiss()
-                                    finish()
-                                }
-                                .create()
-                            dialog.show()
-                        }
+                        dialog.show()
+                    } else {
+                        val dialog = AlertDialog.Builder(this)
+                            .setTitle("Finance Manager")
+                            .setMessage("Ocorreu um erro. Tente novamente.")
+                            .setCancelable(false)
+                            .setPositiveButton("Ok") {dialog, _ ->
+                                dialog.dismiss()
+                                finish()
+                            }
+                            .create()
+                        dialog.show()
                     }
-                } else {
-                    mRegisterPasswordConfirmation.error = "As senhas não são as mesmas"
-                    return
-            }
+                }
         }
     }
 
     private fun isFieldFilled(input: CharSequence, field: EditText) : Boolean {
         if (input.isBlank()) {
             field.error = "Esse campo é obrigatório"
+            return false
+        }
+        return true
+    }
+
+    private fun fieldHasEnoughSize(input: CharSequence, field: EditText) : Boolean {
+        if (input.length < 6) {
+            field.error = "Digite uma senha com no mínimo 6 caracteres"
+            return false
+        }
+        return true
+    }
+
+    private fun areFieldEqual(password: CharSequence, confirmation: CharSequence, field: EditText) : Boolean {
+        if (password != confirmation) {
+            field.error = "As senhas não são iguais"
             return false
         }
         return true
