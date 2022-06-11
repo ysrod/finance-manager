@@ -13,6 +13,7 @@ import androidx.appcompat.widget.SwitchCompat
 import br.unifor.cct.financemanagerfb.R
 import br.unifor.cct.financemanagerfb.entity.Finances
 import br.unifor.cct.financemanagerfb.entity.User
+import com.cottacush.android.currencyedittext.CurrencyEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -27,7 +28,7 @@ class FinanceActivity : AppCompatActivity() {
 
 
     private lateinit var mFinanceDescription : EditText
-    private lateinit var mFinanceAmount : EditText
+    private lateinit var mFinanceAmount : CurrencyEditText
     private lateinit var mFinanceDate : TextView
     private lateinit var mFinanceSwitch : Switch
     private lateinit var mFinanceButton : Button
@@ -84,7 +85,7 @@ class FinanceActivity : AppCompatActivity() {
 
         mFinanceButton.setOnClickListener{
             val description = mFinanceDescription.text.toString().trim()
-            val amountText = mFinanceAmount.text.toString().trim()
+            val amountText = mFinanceAmount.getNumericValue().toString()
             val date = mFinanceDate.text.toString().trim()
             val type = mFinanceType
 
