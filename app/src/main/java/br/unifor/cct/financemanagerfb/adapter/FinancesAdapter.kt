@@ -48,9 +48,9 @@ class FinancesAdapter (var finances:List<Finances>):RecyclerView.Adapter<Finance
         holder.description.text = finances[position].description
         holder.date.text = finances[position].date
         if (finances[position].type) {
-            holder.type.setBackgroundColor(Color.GREEN)
+            holder.type.setBackgroundResource(R.drawable.revenue_view_layout)
         } else {
-            holder.type.setBackgroundColor(Color.RED)
+            holder.type.setBackgroundResource(R.drawable.expense_view_layout)
         }
 
     }

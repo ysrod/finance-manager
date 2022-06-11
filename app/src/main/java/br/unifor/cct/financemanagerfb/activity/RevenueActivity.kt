@@ -37,9 +37,6 @@ class RevenueActivity : AppCompatActivity(), FinancesItemListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_revenue)
 
-        Toast.makeText(baseContext, "Revenue Activity",
-            Toast.LENGTH_SHORT).show()
-
         mAuth = Firebase.auth
         mDatabase = Firebase.database
 
