@@ -26,7 +26,6 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var mAuth : FirebaseAuth //autenticação
     private lateinit var mDatabase : FirebaseDatabase
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -67,8 +66,8 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         isFormFilled = areFieldEqual(password, passwordConfirmation, mRegisterPasswordConfirmation) && isFormFilled
 
         if (isFormFilled) {
-            val usersRef = mDatabase.getReference("/users")
-            val key = usersRef.push().key?:""
+            val usersRef = mDatabase.getReference("/users") // Pega a referencia
+            val key = usersRef.push().key?:"" // Gera uma chave aleatória
 
             val user = User (
                 id = key,
@@ -77,33 +76,13 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                 phone = phone.toString()
             )
 
-            usersRef.child(key).setValue(user)
-
             mAuth.createUserWithEmailAndPassword(email.toString(), password.toString())
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val dialog = AlertDialog.Builder(this)
-                            .setTitle("Finance Manager")
-                            .setMessage("Usuário cadastrado!")
-                            .setCancelable(false)
-                            .setPositiveButton("Ok") {dialog, _ ->
-                                dialog.dismiss()
-                                finish()
-                            }
-                            .create()
-
-                        dialog.show()
+                        usersRef.child(key).setValue(user) // Cria um nó filho identificado pela chave, e dentro coloca o usuário
+                        showDialog("Usuário cadastrado com sucesso!")
                     } else {
-                        val dialog = AlertDialog.Builder(this)
-                            .setTitle("Finance Manager")
-                            .setMessage("Ocorreu um erro. Tente novamente.")
-                            .setCancelable(false)
-                            .setPositiveButton("Ok") {dialog, _ ->
-                                dialog.dismiss()
-                                finish()
-                            }
-                            .create()
-                        dialog.show()
+                        showDialog("Ocorreu um erro. Tente novamente")
                     }
                 }
         }
@@ -131,5 +110,17 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
             return false
         }
         return true
+    }
+
+    private fun showDialog (message:String) {
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("Piggy Bank")
+            .setMessage(message)
+            .setCancelable(false)
+            .setPositiveButton("Ok") { dialog, _ ->
+                dialog.dismiss()
+                finish()
+            }.create()
+        dialog.show()
     }
 }

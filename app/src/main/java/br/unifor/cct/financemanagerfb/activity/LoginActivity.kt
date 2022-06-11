@@ -63,9 +63,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                             showDialog("Usuário ou senha inválidos")
                         }
                     }
-
-
-
             }
 
             R.id.login_button_register ->{
@@ -73,18 +70,16 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(it)
             }
         }
-
-
     }
 
     private fun showDialog (message:String) {
         val dialog = AlertDialog.Builder(this)
-            .setTitle("Finance Manager")
+            .setTitle("Piggy Bank")
             .setMessage(message)
             .setCancelable(false)
-            .setPositiveButton("OK") { dialog, _ ->
+            .setPositiveButton("Ok") { dialog, _ ->
                 dialog.dismiss()
-            }
+            }.create()
         dialog.show()
     }
 }
