@@ -1,5 +1,6 @@
 package br.unifor.cct.financemanagerfb.activity
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,6 +18,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 // classe para registrar as finanças
@@ -25,7 +28,7 @@ class FinanceActivity : AppCompatActivity() {
 
     private lateinit var mFinanceDescription : EditText
     private lateinit var mFinanceAmount : EditText
-    private lateinit var mFinanceDate : EditText
+    private lateinit var mFinanceDate : TextView
     private lateinit var mFinanceSwitch : Switch
     private lateinit var mFinanceButton : Button
 
@@ -35,6 +38,8 @@ class FinanceActivity : AppCompatActivity() {
     private var mUserKey = ""
     private var mFinanceKey = ""
     private var mFinanceType = false
+
+    private var cal = Calendar.getInstance()
 
 
 
@@ -62,16 +67,32 @@ class FinanceActivity : AppCompatActivity() {
 
         }
 
+        val dateListener = DatePickerDialog.OnDateSetListener { _, year, month, day ->
+            cal.set(Calendar.YEAR, year)
+            cal.set(Calendar.MONTH, month)
+            cal.set(Calendar.DAY_OF_MONTH, day)
+            updateDate()
+        }
+
+        mFinanceDate.setOnClickListener{
+            DatePickerDialog(this@FinanceActivity,
+                dateListener,
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH),
+                cal.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
         mFinanceButton.setOnClickListener{
             val description = mFinanceDescription.text.toString().trim()
             val amountText = mFinanceAmount.text.toString().trim()
             val date = mFinanceDate.text.toString().trim()
             val type = mFinanceType
 
+
             var isFormFilled = true
             isFormFilled = isFieldFilled(description, mFinanceDescription) && isFormFilled
             isFormFilled = isFieldFilled(amountText, mFinanceAmount) && isFormFilled
-            isFormFilled = isFieldFilled(date, mFinanceDate) && isFormFilled
+//            isFormFilled = isFieldFilled(date, mFinanceDate) && isFormFilled
 
             if (isFormFilled) {
 
@@ -129,7 +150,7 @@ class FinanceActivity : AppCompatActivity() {
                         .child(mFinanceKey)
 
                     financeRef.setValue(finance)
-                    updateBalance(amount)
+
 
                     dialogShow(if (type) "Receita '${description}' atualizada com sucesso!" else
                         "Despesa '${description}' atualizada com sucesso!")
@@ -206,18 +227,17 @@ class FinanceActivity : AppCompatActivity() {
             .equalTo(mAuth.currentUser?.email)
             .addValueEventListener(object:ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    var balance = snapshot.children.first().getValue(User::class.java)?.balance
-                    if (balance != null) {
-                        balance += amount
-                        Log.i("App", "balance: $balance")
-                    }
+                    var balance = snapshot.children.first().getValue(User::class.java)?.balance!!
+                    balance += amount
+                    Log.i("App", "balance: $balance")
+                    Log.i("App", "mUserKey: $mUserKey")
 
                     val balanceRef = mDatabase
                         .reference
                         .child("/users")
                         .child(mUserKey)
-                        .child("/balance")
-                    
+                        .child("balance")
+
                     balanceRef.setValue(balance)
 
                 }
@@ -227,5 +247,11 @@ class FinanceActivity : AppCompatActivity() {
                 }
 
             })
+    }
+
+    private fun updateDate(){
+        val format = "dd/MM/yyyy"
+        val sdf = SimpleDateFormat(format, Locale.CANADA)
+        mFinanceDate.text = sdf.format(cal.time)
     }
 }

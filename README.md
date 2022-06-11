@@ -7,10 +7,16 @@
 
 Aplicativo fazer:
 
-Design telas;
+Design telas:
+OK - Login Activity
+OK - Register Activity
+- Main Activity
+- Finance Activity
+- Revenue Activity
+- Expense Activity
 
 Register Activity:
-- Não permitir que o usuário se cadastre com um e-mail já existente no firebase
+OK - Não permitir que o usuário se cadastre com um e-mail já existente no firebase
 OK - Não permitir senhas com menos de 6 caracteres
 
 
@@ -25,7 +31,7 @@ OK - Botões enviarem para a Finance Activity o estado do switch que indica se �
 Finance Activity:
 -- Facilitar o preenchimento do campo 'valor'
 -- Facilitar o preenchimento do campo 'data'
--- Voltar para a tela correta ao se cadastrar uma finança, ex.: cadastrou despesa -> vai pra expense activity
+OK -- Voltar para a tela correta ao se cadastrar uma finança, ex.: cadastrou despesa -> vai pra expense activity
 
 OK - Fazer com que o switch mude de estado (atributo "type" de Finance) dependendo da origem do usuário:
       -- Botão cadastrar receita: switch true;
