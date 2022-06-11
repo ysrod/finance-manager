@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import br.unifor.cct.financemanagerfb.R
 import br.unifor.cct.financemanagerfb.entity.User
@@ -65,21 +66,22 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         isFormFilled = isFieldFilled(passwordConfirmation, mRegisterPasswordConfirmation) && isFormFilled
         isFormFilled = areFieldEqual(password, passwordConfirmation, mRegisterPasswordConfirmation) && isFormFilled
 
+
         if (isFormFilled) {
             val usersRef = mDatabase.getReference("/users") // Pega a referencia
-            val key = usersRef.push().key?:"" // Gera uma chave aleatória
-
-            val user = User (
-                id = key,
-                name = name.toString(),
-                email = email.toString(),
-                phone = phone.toString()
-            )
 
             mAuth.createUserWithEmailAndPassword(email.toString(), password.toString())
                 .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        usersRef.child(key).setValue(user) // Cria um nó filho identificado pela chave, e dentro coloca o usuário
+                    if (task.isSuccessful) { //Aqui ele criou o usuário no Authentication
+
+                        val user = User (
+                            id = mAuth.currentUser!!.uid,
+                            name = name.toString(),
+                            email = email.toString(),
+                            phone = phone.toString()
+                        )
+
+                        usersRef.child(user.id).setValue(user) // Cria um nó filho identificado pela chave, e dentro coloca o usuário
                         showDialog("Usuário cadastrado com sucesso!")
                     } else {
                         showDialog("Ocorreu um erro. Tente novamente")

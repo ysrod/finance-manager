@@ -1,24 +1,19 @@
 package br.unifor.cct.financemanagerfb.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import br.unifor.cct.financemanagerfb.R
-import br.unifor.cct.financemanagerfb.adapter.FinancesAdapter
 import br.unifor.cct.financemanagerfb.entity.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import org.w3c.dom.Text
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,6 +23,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mMainExpenseList: RecyclerView
     private lateinit var mMainPlaceholderExpense : TextView
     private lateinit var mMainPlaceholderRevenue : TextView
+    private lateinit var mWelcome : TextView
+    private lateinit var mTotal : TextView
 
     private lateinit var mDatabase : FirebaseDatabase
     private lateinit var mAuth : FirebaseAuth
@@ -47,6 +44,8 @@ class MainActivity : AppCompatActivity() {
         mMainExpenseButton = findViewById(R.id.main_button_expense)
         mMainPlaceholderExpense = findViewById(R.id.textView)
         mMainPlaceholderRevenue = findViewById(R.id.textView2)
+        mWelcome = findViewById(R.id.main_textView_welcome)
+        mTotal = findViewById(R.id.main_textView_total)
 
         mMainRevenueButton.setOnClickListener{
             Log.i("App","cliquei")
@@ -75,22 +74,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        val userRef = mDatabase.getReference("/users")
-        userRef.orderByChild("email").equalTo(mAuth.currentUser?.email)
-            .addValueEventListener(object: ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val user = snapshot.children.first().getValue(User::class.java)
-                    mUserKey = user?.id ?:""
-//                     = FinancesAdapter(user?.finances?.values?.toList()?.filter {
-//                        it.type}!!)
-//                    mRevenueAdapter.setOnFinanceItemListener(this@RevenueActivity)
-//                    mRevenueList.adapter = mRevenueAdapter
-                }
+        val userRef : DatabaseReference = mDatabase.getReference("/users")
 
-                override fun onCancelled(error: DatabaseError) {
+        userRef.child(mAuth.currentUser!!.uid).get().addOnSuccessListener {
+            if (it.exists()) {
+                val nome = it.child("name").value
+                mWelcome.text = "Bem vinde, ${nome}"
 
-                }
-
-            })
+                val balance = it.child("balance").value
+                mTotal.text = "Total: R$ ${balance}"
+            }
+        }
     }
 }
