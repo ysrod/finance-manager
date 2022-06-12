@@ -179,10 +179,13 @@ class FinanceActivity : AppCompatActivity() {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val user = snapshot.children.first().getValue(User::class.java)
                         val finance = user?.finances?.values?.find{it.id == mFinanceKey}
-                        mFinanceDescription.text = Editable.Factory.getInstance().newEditable(finance?.description)
-                        mFinanceAmount.text = Editable.Factory.getInstance().newEditable(finance?.amount.toString())
-                        mFinanceDate.text = Editable.Factory.getInstance().newEditable(finance?.date)
-                        mFinanceSwitch.isChecked = finance?.type ?:false
+                        if (finance != null) {
+                            mFinanceDescription.text = Editable.Factory.getInstance().newEditable(finance.description)
+                            mFinanceAmount.text = Editable.Factory.getInstance().newEditable(finance.amount.toString())
+                            mFinanceDate.text = Editable.Factory.getInstance().newEditable(finance.date)
+                            mFinanceSwitch.isChecked = finance.type ?:false
+                        }
+
                     }
 
                     override fun onCancelled(error: DatabaseError) {

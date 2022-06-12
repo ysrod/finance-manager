@@ -50,4 +50,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation 'com.cottacush:CurrencyEditText:0.0.10'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
