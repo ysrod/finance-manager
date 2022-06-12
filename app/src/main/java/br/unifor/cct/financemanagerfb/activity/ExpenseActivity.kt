@@ -72,7 +72,7 @@ class ExpenseActivity : AppCompatActivity(), FinancesItemListener {
                             ?.finances
                             ?.values
                             ?.toList()
-                            ?.sortedByDescending{mDateFormat.parse(it.date.replace(" ", ""))}
+                            ?.sortedByDescending{mDateFormat.parse(it.date)}
                             ?.filter{!it.type}!!)
                     mExpenseAdapater.setOnFinanceItemListener(this@ExpenseActivity)
                     mExpenseList.adapter = mExpenseAdapater

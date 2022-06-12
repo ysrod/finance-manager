@@ -51,4 +51,5 @@ dependencies {
 
     implementation 'com.cottacush:CurrencyEditText:0.0.10'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.github.RedMadRobot:input-mask-android:6.1.0'
 }

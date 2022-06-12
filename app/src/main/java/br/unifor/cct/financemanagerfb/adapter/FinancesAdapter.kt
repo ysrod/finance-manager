@@ -44,7 +44,7 @@ class FinancesAdapter (var finances:List<Finances>):RecyclerView.Adapter<Finance
     }
 
     override fun onBindViewHolder(holder: FinancesViewHolder, position: Int) {
-        holder.amount.text = finances[position].amount.toString()
+        holder.amount.text = "R$ %.2f".format(finances[position].amount)
         holder.description.text = finances[position].description
         holder.date.text = finances[position].date
         if (finances[position].type) {

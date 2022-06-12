@@ -74,6 +74,7 @@
             android:background="@drawable/edit_text_bg"
             android:ems="10"
             android:hint="Número de telefone"
+            android:digits="1234567890+-() "
             android:inputType="phone"
             android:minHeight="48dp"
             android:drawableStart="@drawable/phone"

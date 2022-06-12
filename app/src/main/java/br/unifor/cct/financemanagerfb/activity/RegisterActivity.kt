@@ -1,12 +1,13 @@
 package br.unifor.cct.financemanagerfb.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.telephony.PhoneNumberUtils.formatNumber
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import br.unifor.cct.financemanagerfb.R
 import br.unifor.cct.financemanagerfb.entity.User
 import com.google.firebase.auth.FirebaseAuth
@@ -14,8 +15,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import android.telephony.PhoneNumberUtils
-import android.telephony.PhoneNumberUtils.formatNumber
+import com.redmadrobot.inputmask.MaskedTextChangedListener
+import com.redmadrobot.inputmask.MaskedTextChangedListener.Companion.installOn
+
 
 class RegisterActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -44,12 +46,30 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         mRegisterSave = findViewById(R.id.register_button)
         mRegisterSave.setOnClickListener(this)
 
+        val listener: MaskedTextChangedListener = installOn(
+            mRegisterPhone,
+            "([00]) [00000]-[0000]",
+            object : MaskedTextChangedListener.ValueListener {
+                override fun onTextChanged(
+                    maskFilled: Boolean,
+                    extractedValue: String,
+                    formattedValue: String
+                ) {
+                    Log.d("TAG", extractedValue)
+                    Log.d("TAG", maskFilled.toString())
+                }
+            }
+        )
+
+        mRegisterPhone.setHint(listener.placeholder())
+
     }
 
     override fun onClick(view: View?) {
         when(view?.id) {
             R.id.register_button -> handlerSaveAction()
         }
+
     }
 
     private fun handlerSaveAction (){
@@ -68,7 +88,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
         isFormFilled = isFieldFilled(passwordConfirmation, mRegisterPasswordConfirmation) && isFormFilled
         isFormFilled = areFieldEqual(password, passwordConfirmation, mRegisterPasswordConfirmation) && isFormFilled
 
-        val formattedPhone = formatNumber(phone.toString(),"BR")
+//        val formattedPhone = formatNumber(phone.toString(),"BR")
 
 
         if (isFormFilled) {
@@ -83,7 +103,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                             id = key,
                             name = name.toString(),
                             email = email.toString(),
-                            phone = formattedPhone
+                            phone = phone.toString()
                         )
 
                         usersRef.child(key).setValue(user) // Cria um nó filho identificado pela chave, e dentro coloca o usuário

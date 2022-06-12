@@ -174,7 +174,7 @@ class FinanceActivity : AppCompatActivity() {
                         val finance = user?.finances?.values?.find{it.id == mFinanceKey}
                         if (finance != null) {
                             mFinanceDescription.text = Editable.Factory.getInstance().newEditable(finance.description)
-                            mFinanceAmount.text = Editable.Factory.getInstance().newEditable(finance.amount.toString())
+                            mFinanceAmount.text = Editable.Factory.getInstance().newEditable("%.2f".format(finance.amount))
                             mFinanceDate.text = Editable.Factory.getInstance().newEditable(finance.date)
                             mFinanceSwitch.isChecked = finance.type ?:false
                         }

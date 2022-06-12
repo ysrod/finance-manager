@@ -71,7 +71,7 @@ class RevenueActivity : AppCompatActivity(), FinancesItemListener {
                             ?.finances
                             ?.values
                             ?.toList()
-                            ?.sortedByDescending{mDateFormat.parse(it.date.replace(" ", ""))}
+                            ?.sortedByDescending{mDateFormat.parse(it.date)}
                             ?.filter{it.type}!!)
                     mRevenueAdapter.setOnFinanceItemListener(this@RevenueActivity)
                     mRevenueList.adapter = mRevenueAdapter

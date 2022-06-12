@@ -7,13 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import br.unifor.cct.financemanagerfb.R
 import br.unifor.cct.financemanagerfb.entity.User
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.components.Description
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.utils.EntryXComparator
 import com.google.firebase.auth.FirebaseAuth
@@ -95,12 +95,14 @@ class LineChartActivity : AppCompatActivity() {
                     Log.i("App", "Tamanho primeiro: ${mRevenueData.size.toString()}")
                     Log.i("App", "Tamanho primeiro: ${mExpenseData.size.toString()}")
 
+
+                    //Organizando pelo eixo x
                     Collections.sort(mRevenueData, EntryXComparator())
                     Collections.sort(mExpenseData, EntryXComparator())
 
                     val lineRevenueSet = LineDataSet(mRevenueData, "Receitas")
                     lineRevenueSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-                    val lineExpenseSet = LineDataSet(linePointExpense(), "Despesas")
+                    val lineExpenseSet = LineDataSet(mExpenseData, "Despesas")
                     lineExpenseSet.setAxisDependency(YAxis.AxisDependency.LEFT);
 
 
@@ -108,8 +110,33 @@ class LineChartActivity : AppCompatActivity() {
                     iLineDataSets.add(lineRevenueSet)
                     iLineDataSets.add(lineExpenseSet)
 
+
+                    //Legendas e eixos
+                    val xAxis: XAxis = mlineChart.getXAxis()
+                    xAxis.granularity = 1F
+                    xAxis.labelCount = 6
+                    xAxis.setTextSize(20F)
+
+//                    var yaxis = mlineChart.getAxisLeft();
+//                    yaxis.spaceTop = 35f
+
+
+
+                    mlineChart.extraTopOffset
+                    val legend : Legend = mlineChart.getLegend()
+                    legend.setTextSize(20f)
+                    legend.setTextColor(Color.BLACK)
+
+
+                    val description = Description()
+                    description.setText("")
+                    mlineChart.setDescription(description)
+
+
+                    //Recebendo dados
                     val lineData = LineData(iLineDataSets)
                     mlineChart.setData(lineData)
+//                    xAxis.setAxisMaximum(mlineChart.xChartMax + 0.25f)
                     mlineChart.notifyDataSetChanged()
                     mlineChart.invalidate()
 
@@ -117,10 +144,10 @@ class LineChartActivity : AppCompatActivity() {
                     //if you want set background color use below method
                     //lineChart.setBackgroundColor(Color.RED);
 
-
+                    //Caso não haja dados ainda
                     mlineChart.setNoDataText("Procurando dados...")
 
-
+                    //Customização das linhas
                     lineRevenueSet.setColor(Color.GREEN)
                     lineExpenseSet.setColor(Color.RED)
 
@@ -178,7 +205,7 @@ class LineChartActivity : AppCompatActivity() {
         lineDataSet.setLineWidth(5F)
         lineDataSet.setCircleRadius(10F)
         lineDataSet.setCircleHoleRadius(10F)
-        lineDataSet.setValueTextSize(15F)
+        lineDataSet.setValueTextSize(25F)
         lineDataSet.setValueTextColor(Color.BLACK)
     }
 
