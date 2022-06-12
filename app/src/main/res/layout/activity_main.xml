@@ -71,7 +71,7 @@
             android:layout_marginTop="30dp"
             android:text="Total: "
             android:textColor="#000000"
-            android:textSize="16sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/main_textView_welcome" />
@@ -112,7 +112,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="240dp"
         android:background="@drawable/white_layout_bg"
@@ -153,7 +153,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="30dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="30dp"
         android:background="@drawable/white_layout_bg"
@@ -187,5 +186,20 @@
             app:layout_constraintTop_toBottomOf="@+id/textView"
             tools:itemCount="5" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/main_button_graphs"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="25dp"
+        android:backgroundTint="@color/buttons"
+        android:text="Gráfico de finanças"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_layout_despesas" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
