@@ -78,14 +78,15 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) { //Aqui ele criou o usuário no Authentication
 
+                        val key = usersRef.push().key ?: ""
                         val user = User (
-                            id = mAuth.currentUser!!.uid,
+                            id = key,
                             name = name.toString(),
                             email = email.toString(),
                             phone = formattedPhone
                         )
 
-                        usersRef.child(user.id).setValue(user) // Cria um nó filho identificado pela chave, e dentro coloca o usuário
+                        usersRef.child(key).setValue(user) // Cria um nó filho identificado pela chave, e dentro coloca o usuário
                         showDialog("Usuário cadastrado com sucesso!")
                     } else {
                         showDialog("Ocorreu um erro. Tente novamente")

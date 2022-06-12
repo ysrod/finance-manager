@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import br.unifor.cct.financemanagerfb.R
+import br.unifor.cct.financemanagerfb.entity.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mDatabase : FirebaseDatabase
     private lateinit var mAuth : FirebaseAuth
+
+    private var mUserKey = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,14 +75,32 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         val userRef : DatabaseReference = mDatabase.getReference("/users")
 
-        userRef.child(mAuth.currentUser!!.uid).get().addOnSuccessListener {
-            if (it.exists()) {
-                val nome = it.child("name").value
-                mWelcome.text = "Bem vinde, ${nome}"
+        userRef
+            .orderByChild("email")
+            .equalTo(mAuth.currentUser?.email)
+            .addValueEventListener(object: ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val user = snapshot.children.first().getValue(User::class.java)
+                    mUserKey = user?.id ?: ""
 
-                val balance = it.child("balance").value
-                mTotal.text = "Total: R$ ${balance}"
-            }
-        }
+                    val nome = user!!.name
+                    mWelcome.text = "Bem vinde, ${nome}"
+
+                    var total = 0.0
+                    for(finance in user!!.finances.values.toList()) {
+                        if(finance.type) {
+                            total += finance.amount.toDouble()
+                        } else {
+                            total -= finance.amount.toDouble()
+                        }
+                    }
+
+                    mTotal.text = "Total: %.2f".format(total)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+
+            })
     }
 }
