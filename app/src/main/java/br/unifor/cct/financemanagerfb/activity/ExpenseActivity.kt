@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
 
 
 //classe que lista as despesas
@@ -33,6 +34,8 @@ class ExpenseActivity : AppCompatActivity(), FinancesItemListener {
     private lateinit var mDatabase: FirebaseDatabase
 
     private var mUserKey = ""
+
+    private var mDateFormat = SimpleDateFormat("dd/MM/yyyy")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,8 +66,13 @@ class ExpenseActivity : AppCompatActivity(), FinancesItemListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val user = snapshot.children.first().getValue(User::class.java)
                     mUserKey = user?.id ?:""
-                    mExpenseAdapater = FinancesAdapter(user?.finances?.values?.toList()?.filter {
-                        !it.type}!!)
+                    mExpenseAdapater = FinancesAdapter(
+                        user
+                            ?.finances
+                            ?.values
+                            ?.toList()
+                            ?.sortedByDescending{mDateFormat.parse(it.date.replace(" ", ""))}
+                            ?.filter{!it.type}!!)
                     mExpenseAdapater.setOnFinanceItemListener(this@ExpenseActivity)
                     mExpenseList.adapter = mExpenseAdapater
                 }

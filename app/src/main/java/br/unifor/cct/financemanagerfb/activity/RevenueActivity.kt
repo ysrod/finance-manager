@@ -19,6 +19,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 //classe que lista as receitas
@@ -32,6 +34,8 @@ class RevenueActivity : AppCompatActivity(), FinancesItemListener {
     private lateinit var mAuth: FirebaseAuth
 
     private var mUserKey = ""
+
+    private var mDateFormat = SimpleDateFormat("dd/MM/yyyy")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,8 +65,13 @@ class RevenueActivity : AppCompatActivity(), FinancesItemListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val user = snapshot.children.first().getValue(User::class.java)
                     mUserKey = user?.id ?:""
-                    mRevenueAdapter = FinancesAdapter(user?.finances?.values?.toList()?.filter {
-                        it.type}!!)
+                    mRevenueAdapter = FinancesAdapter(
+                        user
+                            ?.finances
+                            ?.values
+                            ?.toList()
+                            ?.sortedByDescending{mDateFormat.parse(it.date.replace(" ", ""))}
+                            ?.filter{it.type}!!)
                     mRevenueAdapter.setOnFinanceItemListener(this@RevenueActivity)
                     mRevenueList.adapter = mRevenueAdapter
                 }
