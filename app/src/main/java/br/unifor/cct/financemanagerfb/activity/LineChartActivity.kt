@@ -92,8 +92,7 @@ class LineChartActivity : AppCompatActivity() {
 
                         }
                     }
-                    Log.i("App", "Tamanho primeiro: ${mRevenueData.size.toString()}")
-                    Log.i("App", "Tamanho primeiro: ${mExpenseData.size.toString()}")
+
 
 
                     //Organizando pelo eixo x
@@ -105,6 +104,8 @@ class LineChartActivity : AppCompatActivity() {
                     val lineExpenseSet = LineDataSet(mExpenseData, "Despesas")
                     lineExpenseSet.setAxisDependency(YAxis.AxisDependency.LEFT)
 
+
+                    //customização
                     lineRevenueSet.setColor(Color.GREEN)
                     lineExpenseSet.setColor(Color.RED)
 
@@ -113,8 +114,6 @@ class LineChartActivity : AppCompatActivity() {
 
                     chartCustomization(lineRevenueSet)
                     chartCustomization(lineExpenseSet)
-
-
 
                     val iLineDataSets: ArrayList<ILineDataSet> = ArrayList()
                     iLineDataSets.add(lineRevenueSet)
@@ -135,7 +134,6 @@ class LineChartActivity : AppCompatActivity() {
                     legend.setTextSize(20f)
                     legend.setTextColor(Color.BLACK)
 
-
                     val description = Description()
                     description.setText("")
                     mlineChart.setDescription(description)
@@ -152,14 +150,6 @@ class LineChartActivity : AppCompatActivity() {
                     mlineChart.notifyDataSetChanged()
                     mlineChart.invalidate()
 
-
-                    //if you want set background color use below method
-                    //lineChart.setBackgroundColor(Color.RED);
-
-                    //Caso não haja dados ainda
-
-
-                    //Customização das linhas
 
 
 
@@ -180,14 +170,14 @@ class LineChartActivity : AppCompatActivity() {
 
     }
 
-
+    // dados para teste
     private fun linePointRevenue(): ArrayList<Entry> {
         val dataSet = ArrayList<Entry>()
         dataSet.add(Entry(0F, 40F))
         dataSet.add(Entry(1F, 10F))
         dataSet.add(Entry(2F, 15F))
         dataSet.add(Entry(3F, 12F))
-//        dataSet.add(Entry(4F, 20F))
+
 
         return dataSet
     }

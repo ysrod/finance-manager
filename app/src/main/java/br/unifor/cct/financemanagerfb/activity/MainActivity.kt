@@ -3,6 +3,7 @@ package br.unifor.cct.financemanagerfb.activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.unifor.cct.financemanagerfb.R
 import br.unifor.cct.financemanagerfb.adapter.FinancesAdapter
+import br.unifor.cct.financemanagerfb.adapter.FinancesItemListener
 import br.unifor.cct.financemanagerfb.entity.Finances
 import br.unifor.cct.financemanagerfb.entity.User
 import com.google.firebase.auth.FirebaseAuth
@@ -19,7 +21,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), FinancesItemListener {
 
     private lateinit var mMainRevenueButton : Button
     private lateinit var mMainExpenseButton: Button
@@ -134,9 +136,11 @@ class MainActivity : AppCompatActivity() {
                     mTotal.text = "Total: R$%.2f".format(total)
 
                     mRevenueAdapter = FinancesAdapter(lastRevenues)
+                    mRevenueAdapter.setOnFinanceItemListener(this@MainActivity)
                     mMainRevenueList.adapter = mRevenueAdapter
 
                     mExpenseAdapter = FinancesAdapter(lastExpenses)
+                    mExpenseAdapter.setOnFinanceItemListener(this@MainActivity)
                     mMainExpenseList.adapter = mExpenseAdapter
                 }
 
@@ -144,5 +148,20 @@ class MainActivity : AppCompatActivity() {
                 }
 
             })
+    }
+
+    override fun setOnItemClickListener(view: View, position: Int) {
+        if (view.parent == mMainRevenueList){
+            val it = Intent(this, RevenueActivity::class.java)
+            startActivity(it)
+        } else {
+            val it = Intent(this, ExpenseActivity::class.java)
+            startActivity(it)
+        }
+
+    }
+
+    override fun setOnItemLongClickListener(view: View, position: Int) {
+
     }
 }
