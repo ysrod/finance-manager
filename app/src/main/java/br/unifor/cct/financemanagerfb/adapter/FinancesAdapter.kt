@@ -26,8 +26,7 @@ class FinancesAdapter (var finances:List<Finances>):RecyclerView.Adapter<Finance
             view.setOnLongClickListener {
                 listener?.setOnItemLongClickListener(it,adapterPosition)
                 true
-                //precisamos de booleano pq esse componente é executado em uma cadeia de
-                // componentes, o true indica que ele deve parar de seguir essa cadeia
+
             }
         }
 

@@ -146,7 +146,6 @@ class LineChartActivity : AppCompatActivity() {
                     mlineChart.extraLeftOffset = 10F
                     mlineChart.extraTopOffset = 10F
                     mlineChart.setNoDataText("Procurando dados...")
-//                    xAxis.setAxisMaximum(mlineChart.xChartMax + 0.25f)
                     mlineChart.notifyDataSetChanged()
                     mlineChart.invalidate()
 
@@ -165,10 +164,6 @@ class LineChartActivity : AppCompatActivity() {
 
     }
 
-    override fun onStart() {
-        super.onStart()
-
-    }
 
     // dados para teste
     private fun linePointRevenue(): ArrayList<Entry> {

@@ -91,6 +91,7 @@ class ExpenseActivity : AppCompatActivity(), FinancesItemListener {
         it.putExtra("financeKey", mExpenseAdapater.finances[position].id)
         it.putExtra("financeType", false)
         startActivity(it)
+        finish()
     }
 
     override fun setOnItemLongClickListener(view: View, position: Int) {

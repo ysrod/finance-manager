@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity(), FinancesItemListener {
                     mUserKey = user?.id ?: ""
 
                     val nome = user!!.name
-                    mWelcome.text = "Bem vinde, ${nome}"
+                    mWelcome.text = "Bem-vinde, ${nome}"
 
                     val finances = user
                         .finances

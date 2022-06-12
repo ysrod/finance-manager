@@ -90,6 +90,7 @@ class RevenueActivity : AppCompatActivity(), FinancesItemListener {
         it.putExtra("financeKey", mRevenueAdapter.finances[position].id)
         it.putExtra("financeType", true)
         startActivity(it)
+        finish()
     }
 
     override fun setOnItemLongClickListener(view: View, position: Int) {

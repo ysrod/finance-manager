@@ -28,7 +28,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var mRegisterPasswordConfirmation: EditText
     private lateinit var mRegisterSave: Button
 
-    private lateinit var mAuth : FirebaseAuth //autenticação
+    private lateinit var mAuth : FirebaseAuth
     private lateinit var mDatabase : FirebaseDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,11 +92,11 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
 
 
         if (isFormFilled) {
-            val usersRef = mDatabase.getReference("/users") // Pega a referencia
+            val usersRef = mDatabase.getReference("/users")
 
             mAuth.createUserWithEmailAndPassword(email.toString(), password.toString())
                 .addOnCompleteListener { task ->
-                    if (task.isSuccessful) { //Aqui ele criou o usuário no Authentication
+                    if (task.isSuccessful) {
 
                         val key = usersRef.push().key ?: ""
                         val user = User (
@@ -106,7 +106,7 @@ class RegisterActivity : AppCompatActivity(), View.OnClickListener {
                             phone = phone.toString()
                         )
 
-                        usersRef.child(key).setValue(user) // Cria um nó filho identificado pela chave, e dentro coloca o usuário
+                        usersRef.child(key).setValue(user)
                         showDialog("Usuário cadastrado com sucesso!")
                     } else {
                         showDialog("Ocorreu um erro. Tente novamente")
