@@ -59,8 +59,8 @@ class LineChartActivity : AppCompatActivity() {
                     val user = snapshot.children.first().getValue(User::class.java)
                     mUserKey = user?.id ?:""
 
-                    var revenuePos = 0
-                    var expensePos = 0
+                    var revenuePos = 1
+                    var expensePos = 1
 
                     var revenueList = user
                         ?.finances
@@ -101,9 +101,19 @@ class LineChartActivity : AppCompatActivity() {
                     Collections.sort(mExpenseData, EntryXComparator())
 
                     val lineRevenueSet = LineDataSet(mRevenueData, "Receitas")
-                    lineRevenueSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+                    lineRevenueSet.setAxisDependency(YAxis.AxisDependency.LEFT)
                     val lineExpenseSet = LineDataSet(mExpenseData, "Despesas")
-                    lineExpenseSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+                    lineExpenseSet.setAxisDependency(YAxis.AxisDependency.LEFT)
+
+                    lineRevenueSet.setColor(Color.GREEN)
+                    lineExpenseSet.setColor(Color.RED)
+
+                    lineRevenueSet.setCircleColor(Color.GREEN)
+                    lineExpenseSet.setCircleColor(Color.RED)
+
+                    chartCustomization(lineRevenueSet)
+                    chartCustomization(lineExpenseSet)
+
 
 
                     val iLineDataSets: ArrayList<ILineDataSet> = ArrayList()
@@ -120,8 +130,6 @@ class LineChartActivity : AppCompatActivity() {
 //                    var yaxis = mlineChart.getAxisLeft();
 //                    yaxis.spaceTop = 35f
 
-
-
                     mlineChart.extraTopOffset
                     val legend : Legend = mlineChart.getLegend()
                     legend.setTextSize(20f)
@@ -136,6 +144,10 @@ class LineChartActivity : AppCompatActivity() {
                     //Recebendo dados
                     val lineData = LineData(iLineDataSets)
                     mlineChart.setData(lineData)
+                    mlineChart.extraRightOffset = 30F
+                    mlineChart.extraLeftOffset = 10F
+                    mlineChart.extraTopOffset = 10F
+                    mlineChart.setNoDataText("Procurando dados...")
 //                    xAxis.setAxisMaximum(mlineChart.xChartMax + 0.25f)
                     mlineChart.notifyDataSetChanged()
                     mlineChart.invalidate()
@@ -145,17 +157,9 @@ class LineChartActivity : AppCompatActivity() {
                     //lineChart.setBackgroundColor(Color.RED);
 
                     //Caso não haja dados ainda
-                    mlineChart.setNoDataText("Procurando dados...")
+
 
                     //Customização das linhas
-                    lineRevenueSet.setColor(Color.GREEN)
-                    lineExpenseSet.setColor(Color.RED)
-
-                    lineRevenueSet.setCircleColor(Color.GREEN)
-                    lineExpenseSet.setCircleColor(Color.RED)
-
-                    chartCustomization(lineRevenueSet)
-                    chartCustomization(lineExpenseSet)
 
 
 
