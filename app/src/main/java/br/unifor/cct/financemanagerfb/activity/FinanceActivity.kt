@@ -108,13 +108,6 @@ class FinanceActivity : AppCompatActivity() {
                                 val financeId = financesRef.push().key ?: " "
                                 val finance = Finances(financeId, description, amount, date, type)
                                 financesRef.child(financeId).setValue(finance)
-                                if (type) {
-                                    updateBalance(amount)
-                                } else {
-                                    updateBalance(-amount)
-                                }
-
-
 
                                 dialogShow(if (type) "Receita cadastrada com sucesso!" else "Despesa cadastrada com sucesso!")
 
@@ -232,34 +225,7 @@ class FinanceActivity : AppCompatActivity() {
         return true
     }
 
-   private fun updateBalance(amount : Double) {
-        val userRef = mDatabase.getReference("/users")
-        userRef
-            .orderByChild("email")
-            .equalTo(mAuth.currentUser?.email)
-            .addValueEventListener(object:ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    var balance = snapshot.children.first().getValue(User::class.java)?.balance!!
-                    balance += amount
-                    Log.i("App", "balance: $balance")
-                    Log.i("App", "mUserKey: $mUserKey")
 
-                    val balanceRef = mDatabase
-                        .reference
-                        .child("/users")
-                        .child(mUserKey)
-                        .child("balance")
-
-                    balanceRef.setValue(balance)
-
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-
-                }
-
-            })
-    }
 
     private fun updateDate(){
         val format = "dd/MM/yyyy"

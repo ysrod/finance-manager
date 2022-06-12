@@ -53,6 +53,7 @@ class ExpenseActivity : AppCompatActivity(), FinancesItemListener {
             val it = Intent(this,FinanceActivity::class.java)
             it.putExtra("financeType", false)
             startActivity(it)
+            finish()
         }
 
 

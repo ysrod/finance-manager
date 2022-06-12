@@ -18,11 +18,11 @@ OK - Finance Activity
 Register Activity:
 OK - Não permitir que o usuário se cadastre com um e-mail já existente no firebase
 OK - Não permitir senhas com menos de 6 caracteres
-- Formatar número de telefone
+OK - Formatar número de telefone
 
 
 Main Activity:
-- Mostrar saldo do usuário a partir de cálculo Receitas - Despesas feito no atributo 'balance';
+OK - Mostrar saldo do usuário a partir de cálculo Receitas - Despesas feito no atributo 'balance';
 OK - Fechar aplicativo caso aperte 'voltar' nesta tela;
 OK - Botões enviarem para a Finance Activity o estado do switch que indica se é uma despesa ou receita.
 - Recyclerview mostrar 5 itens nos quais "type = false" (despesa);
@@ -47,14 +47,14 @@ OK - Fazer com que os campos sejam preenchidos com os detalhes de um item já ex
 
 
 Revenue Activity:
-- Organizar os itens segundo a data
+OK - Organizar os itens segundo a data
 
 OK - Lista (recyclerview) com todos os itens nos quais "type = true";
 OK - Poder clicar uma vez em um item e abrir FinanceActivity com os campos preenchidos;
 OK - Segurar o clique e poder deletar um item;
 
 Expense Activity:
-- Organizar os itens segundo a data
+OK - Organizar os itens segundo a data
 
 OK - Lista (recyclerview) com todos os itens nos quais "type = false";
 OK - Poder clicar uma vez em um item e abrir FinanceActivity com os campos preenchidos;

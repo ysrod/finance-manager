@@ -7,6 +7,5 @@ data class User(
     val name : String = "",
     val phone : String = "",
     val finances : HashMap<String, Finances> = hashMapOf(),
-    val balance : Double = 0.0
 
 )
