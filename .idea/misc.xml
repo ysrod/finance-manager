@@ -10,8 +10,16 @@
         <entry key="..\:/Users/yasmi/AndroidStudioProjects/FinanceManagerFB/app/src/main/res/layout/activity_register.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/yasmi/AndroidStudioProjects/FinanceManagerFB/app/src/main/res/layout/activity_revenue.xml" value="0.264" />
         <entry key="..\:/Users/yasmi/AndroidStudioProjects/FinanceManagerFB/app/src/main/res/layout/finance_item.xml" value="0.264" />
-        <entry key="..\:/Users/yasmi/Documents/GitHub/finance-manager/app/src/main/res/layout/activity_expense.xml" value="0.1" />
-        <entry key="..\:/Users/yasmi/Documents/GitHub/finance-manager/app/src/main/res/layout/activity_revenue.xml" value="0.1" />
+        <entry key="..\:/Users/yasmi/Documents/GitHub/finance-manager/app/src/main/res/layout/activity_expense.xml" value="0.264" />
+        <entry key="..\:/Users/yasmi/Documents/GitHub/finance-manager/app/src/main/res/layout/activity_finance.xml" value="0.2296195652173913" />
+        <entry key="..\:/Users/yasmi/Documents/GitHub/finance-manager/app/src/main/res/layout/activity_line_chart.xml" value="0.264" />
+        <entry key="..\:/Users/yasmi/Documents/GitHub/finance-manager/app/src/main/res/layout/activity_login.xml" value="0.2" />
+        <entry key="..\:/Users/yasmi/Documents/GitHub/finance-manager/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/yasmi/Documents/GitHub/finance-manager/app/src/main/res/layout/activity_register.xml" value="0.2296195652173913" />
+        <entry key="..\:/Users/yasmi/Documents/GitHub/finance-manager/app/src/main/res/layout/activity_revenue.xml" value="0.264" />
+        <entry key="..\:/Users/yasmi/Documents/GitHub/finance-manager/app/src/main/res/layout/activity_splash.xml" value="0.2296195652173913" />
+        <entry key="..\:/Users/yasmi/Documents/GitHub/finance-manager/app/src/main/res/layout/finance_item.xml" value="0.264" />
+        <entry key="..\:/Users/yasmi/Documents/GitHub/finance-manager/app/src/main/res/layout/test.xml" value="0.24456521739130435" />
       </map>
     </option>
   </component>

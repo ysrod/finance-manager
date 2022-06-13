@@ -66,13 +66,13 @@ class LineChartActivity : AppCompatActivity() {
                         ?.finances
                         ?.values
                         ?.toList()
-                        ?.sortedByDescending{mDateFormat.parse(it.date.replace(" ", ""))}
+                        ?.sortedByDescending{mDateFormat.parse(it.date)}
                         ?.filter{it.type}
                         ?.take(5)
                     var expenseList = user?.finances
                         ?.values
                         ?.toList()
-                        ?.sortedByDescending{mDateFormat.parse(it.date.replace(" ", ""))}
+                        ?.sortedByDescending{mDateFormat.parse(it.date)}
                         ?.filter{!it.type}
                         ?.take(5)
 
@@ -129,7 +129,7 @@ class LineChartActivity : AppCompatActivity() {
 //                    var yaxis = mlineChart.getAxisLeft();
 //                    yaxis.spaceTop = 35f
 
-                    mlineChart.extraTopOffset
+
                     val legend : Legend = mlineChart.getLegend()
                     legend.setTextSize(20f)
                     legend.setTextColor(Color.BLACK)
